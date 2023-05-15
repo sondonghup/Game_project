@@ -5,5 +5,5 @@ class make_dataset():
         self.data = pd.read_csv(data_dir, sep='\t')
         
     def npc_load(self, npc_name):
-        return self.data[self.data['npc'] == npc_name]['conversation']
+        return self.data[self.data['npc'] == npc_name]
         

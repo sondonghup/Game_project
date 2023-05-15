@@ -2,6 +2,7 @@ import os
 import openai
 from dataset import make_dataset
 import argparse
+import requests
 
 openai.api_key = os.environ["openai_api_key"]
 
@@ -30,6 +31,14 @@ class chat():
             ]
         )
         return f'{self.npc_name} : '+ response['choices'][0]['message']['content']
+    
+    def sent(self, text):
+        url = "http://localhost:8000/sent"
+        data = {"text": f"{user_input}"}
+        response = requests.post(url, json=data)
+        
+        return response.json()['sentiment']
+
 
 if __name__ == '__main__':
 
@@ -40,7 +49,9 @@ if __name__ == '__main__':
 
     data = make_dataset(args.npc_data_dir)
     npc_data = data.npc_load(args.npc_name)
-    chat = chat(npc_data, args.npc_name)
+    chat = chat(npc_data['conversation'], args.npc_name)
     while True:
         user_input = input('입력 :') + f'\n{args.npc_name} : '
+
+        print(chat.sent(user_input))
         print(chat.npc_chat(user_input))

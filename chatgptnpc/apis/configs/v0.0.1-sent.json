@@ -1,0 +1,8 @@
+{
+    "deploy_port": 8000,
+    "sent" : {
+        "model_name" : "nlp04/kote_sentiment_roberta_large",
+        "device": "mps:0"
+    }
+}
+  

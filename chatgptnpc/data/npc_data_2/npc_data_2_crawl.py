@@ -25,8 +25,11 @@ def quest_crawl_script(url):
     html = bs(html.text, 'html.parser')
     quest_box = html.find_all('table')[2]
     tables = quest_box.find_all('div', {'class' : 'dlg c'})
-    for table in tables:
+    states = quest_box.find_all('div', {'class' : 'dlg s'})
+    for table, state in zip(tables, states):
+        answer = 0
         conversation = table.find('pre')
+        state = state.find_all('div')
 
         while True: # 선택지와 캐릭터가 대화를 하는 것을 제거 합니다
             try:
@@ -41,8 +44,12 @@ def quest_crawl_script(url):
             conversation = conversation.text.replace('\n',' ').replace('\r',' ')
         except:
             continue
+        
+        if len(state) >= 3:
+            answer = 1
+
         with open('npc_data_list.tsv', 'a', encoding='utf-8')as f:
-            f.write(f'{npc}\t{conversation}\n')
+            f.write(f'{npc}\t{conversation}\t{answer}\n')
         
 
 if __name__ == "__main__":
@@ -69,7 +76,7 @@ if __name__ == "__main__":
     elif args.mode == 'data': # 퀘스트별 url을 기준으로 npc와 npc_data를 크롤링 합니다.
 
         with open('npc_data_list.tsv', 'a', encoding='utf-8')as f:
-            f.write(f'npc\tconversation\n')
+            f.write(f'npc\tconversation\tanswer\n')
 
         url_list = []
         with open('quest_url_list.txt', 'r', encoding='utf-8')as f:
