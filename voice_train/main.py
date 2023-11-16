@@ -3,6 +3,8 @@ import os
 import subprocess
 import shutil
 import base64
+from dataset import TextAudioLoader
 
-nosv_name1 = base64.b64decode(('ZXh0ZXJuYWxj').encode('ascii')).decode('ascii')
-print(nosv_name1)
+if __name__ == '__main__':
+    train_data = TextAudioLoader('./data')
+    train_data.get_audio()
